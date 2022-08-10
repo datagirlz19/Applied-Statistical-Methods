@@ -1,0 +1,1511 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2636
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue-Medium;\f1\fnil\fcharset0 HelveticaNeue;\f2\fnil\fcharset0 HelveticaNeue-Bold;
+\f3\fmodern\fcharset0 Courier;\f4\fnil\fcharset0 HelveticaNeue-Italic;\f5\fnil\fcharset0 STIXGeneral-Regular;
+\f6\fmodern\fcharset0 Courier-Oblique;}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;\red255\green255\blue255;\red0\green0\blue0;
+\red242\green242\blue242;\red17\green137\blue135;\red135\green136\blue117;\red210\green0\blue53;\red133\green0\blue96;
+}
+{\*\expandedcolortbl;;\cssrgb\c20000\c20000\c20000;\cssrgb\c100000\c100000\c100000;\cssrgb\c0\c0\c0\c3922;
+\cssrgb\c96078\c96078\c96078;\cssrgb\c0\c60000\c60000;\cssrgb\c60000\c60000\c53333;\cssrgb\c86667\c6667\c26667;\cssrgb\c60000\c0\c45098;
+}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs76 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Multiple Logistic Regression Practice\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\fs36 \cf2 \cb3 Solutions\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\fs60 \cf2 \cb3 A. Research Question\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 \cb3 Students at a small liberal arts college took a placement exam prior to entry in order to provide them guidance when selecting their first math course. The dataset\'a0
+\f2\b MathPlacement
+\f1\b0 \'a0(in Stat2Data) contains the placement scores for 2696 students, along with whether they took the recommended course, and several admissions variables (GPA, SAT score, etc.). We want to use this data to decide how well the math placement process is working. If they take the recommended course, do they succeed (where \'93success\'94 is defined as a grade of \'93B\'94 or above)?\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 B. Exploratory Data Analysis \'96 Simple Logistic Regression\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 \cb3 1.
+\f1\b0 \'a0Load the\'a0
+\f3\fs25\fsmilli12600 \cb4 mosaic
+\f1\fs28 \cb3 \'a0and\'a0
+\f3\fs25\fsmilli12600 \cb4 Stat2Data
+\f1\fs28 \cb3 \'a0packages. Load the data set and look in the manual (or Help menu) to see what variables are contained within it.\cb1 \
+
+\f2\b \cb3 2.
+\f1\b0 \'a0EDA of Response Variable. Investigate the response variable,\'a0
+\f3\fs25\fsmilli12600 \cb4 CourseSuccess
+\f1\fs28 \cb3 . What percentage of students got a \'93B\'94 or better? How many students are missing this variable?\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 summary(MathPlacement$CourseSuccess)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's \
+##  0.0000  0.0000  1.0000  0.6768  1.0000  1.0000     567\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 67.7% of students earned a \'93B\'94 or better. But 567 out of the 2696 values are missing.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 3.
+\f1\b0 \'a0EDA of First Explanatory Variable. First we will try to predict course success using\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 . What type of variable is\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0(binary, categorical, numerical)? What percentage of students took the recommended course? How many students are missing this variable?\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 summary(MathPlacement$RecTaken)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \
+##  0.0000  0.0000  1.0000  0.6855  1.0000  1.0000\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\fs25\fsmilli12600 \cf2 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0is binary: 1 if the student took the recommended course, 0 if he/she didn\'92t. 68.55% of students took the recommended course. No students are missing this information.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 C. Analysis of the relationship \'96 Simple Logistic Regression\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 \cb3 1.
+\f1\b0 \'a0Make a two-way table of\'a0
+\f3\fs25\fsmilli12600 \cb4 CourseSuccess
+\f1\fs28 \cb3 \'a0and\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 . Of those who did take the recommendation, what percentage were successful? Of those who didn\'92t take the recommendation, what percentage were successful?\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 tally(~CourseSuccess+RecTaken,data=MathPlacement)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##              RecTaken\
+## CourseSuccess    0    1\
+##          0     247  441\
+##          1     396 1045\
+##          <NA>  205  362\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 Of those who took the recommendation (1)\'a0
+\f4\i and
+\f1\i0 \'a0we know their grade: 1045/(441+1045) = 70.3% were successful, 441/(441+1045) = 29.7% weren\'92t successful (but we don\'92t know the grade for 19.6% of this group). Of those that didn\'92t take the recommendation (0)\'a0
+\f4\i and
+\f1\i0 \'a0we know their grade: 396/(247+396) = 61.6% were successful and 247/(247+396) = 38.4% weren\'92t (but we don\'92t know the grade for 24.2% of this group).\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 2.
+\f1\b0 \'a0Fit the logistic regression to predict\'a0
+\f3\fs25\fsmilli12600 \cb4 CourseSuccess
+\f1\fs28 \cb3 \'a0from\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 , and call this\'a0
+\f3\fs25\fsmilli12600 \cb4 model1
+\f1\fs28 \cb3 .\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 model1 <- glm(CourseSuccess~RecTaken,data=MathPlacement,family=binomial); summary(model1)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## \
+## Call:\
+## glm(formula = CourseSuccess ~ RecTaken, family = binomial, data = MathPlacement)\
+## \
+## Deviance Residuals: \
+##     Min       1Q   Median       3Q      Max  \
+## -1.5587  -1.3833   0.8391   0.8391   0.9846  \
+## \
+## Coefficients:\
+##             Estimate Std. Error z value Pr(>|z|)    \
+## (Intercept)  0.47203    0.08108   5.822 5.82e-09 ***\
+## RecTaken     0.39070    0.09899   3.947 7.91e-05 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+## \
+## (Dispersion parameter for binomial family taken to be 1)\
+## \
+##     Null deviance: 2679.2  on 2128  degrees of freedom\
+## Residual deviance: 2663.8  on 2127  degrees of freedom\
+##   (567 observations deleted due to missingness)\
+## AIC: 2667.8\
+## \
+## Number of Fisher Scoring iterations: 4\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 3.
+\f1\b0 \'a0Write out the fitted model.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i\fs33\fsmilli16800 \cf2 \cb3 \up0 ln
+\i0 (
+\i oddsofsuccess
+\i0 )=0.472+0.391\uc0\u8727 
+\i RecTaken
+\f1\i0 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs28 \cf2 \cb3 l\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 f\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 u\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 0.472\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 0.391\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 R\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 T\cb1 \up0 \
+\cb3 \up0 a\cb1 \up0 \
+\cb3 \up0 k\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 4.
+\f1\b0 \'a0Interpret the slope coefficient (in terms of an odds ratio), in the context of this situation.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 exp(\cf6 \strokec6 0.39070\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## [1] 1.478015\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 The odds of success for someone who did take the recommended course is 148% the odds of success for someone who didn\'92t listen to the recommendation.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 5.
+\f1\b0 \'a0Use the fitted logistic model to predict the\'a0
+\f4\i probability
+\f1\i0 \'a0of success for a student who took the recommended course, and the\'a0
+\f4\i probability
+\f1\i0 \'a0of success for a student who didn\'92t take the recommended course. What do you notice about these values?\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 For someone who did take the recommendation,\'a0
+\fs33\fsmilli16800 \cb1 \up0 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i \cf2 \cb3 ln
+\i0 (
+\i oddsofsuccess
+\i0 )=0.472+0.391\uc0\u8727 1=0.863
+\f1 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs28 \cf2 \cb3 l\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 f\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 u\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 0.472\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 0.391\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 1\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 0.863\cb1 \up0 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1 \cf2 \cb3 , so\'a0
+\fs33\fsmilli16800 \cb1 \up0 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i \cf2 \cb3 prob
+\i0 =
+\f1 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i\fs23\fsmilli11878 \cf2 \cb3 exp
+\i0 (0.863)
+\f1\fs33\fsmilli16800 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs23\fsmilli11878 \cf2 \cb3 1+
+\i exp
+\i0 (0.863)
+\f1\fs33\fsmilli16800 \cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\f5 \cf2 \cb3 =0.703
+\f1 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs28 \cf2 \cb3 p\cb1 \up0 \
+\cb3 \up0 r\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 b\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 x\cb1 \up0 \
+\cb3 \up0 p\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 0.863\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 1\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 x\cb1 \up0 \
+\cb3 \up0 p\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 0.863\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 0.703\cb1 \up0 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1 \cf2 \cb3 .\cb1 \
+\cb3 For someone who didn\'92t take the recommendation,\'a0
+\fs33\fsmilli16800 \cb1 \up0 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i \cf2 \cb3 ln
+\i0 (
+\i oddsofsuccess
+\i0 )=0.472+0.391\uc0\u8727 0=0.472
+\f1 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs28 \cf2 \cb3 l\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 f\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 u\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 0.472\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 0.391\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 0\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 0.472\cb1 \up0 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1 \cf2 \cb3 , so\'a0
+\fs33\fsmilli16800 \cb1 \up0 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i \cf2 \cb3 prob
+\i0 =
+\f1 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i\fs23\fsmilli11878 \cf2 \cb3 exp
+\i0 (0.472)
+\f1\fs33\fsmilli16800 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs23\fsmilli11878 \cf2 \cb3 1+
+\i exp
+\i0 (0.472)
+\f1\fs33\fsmilli16800 \cb1 \
+\
+\pard\pardeftab720\partightenfactor0
+
+\f5 \cf2 \cb3 =0.616
+\f1 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs28 \cf2 \cb3 p\cb1 \up0 \
+\cb3 \up0 r\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 b\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 x\cb1 \up0 \
+\cb3 \up0 p\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 0.472\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 1\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 x\cb1 \up0 \
+\cb3 \up0 p\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 0.472\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 0.616\cb1 \up0 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1 \cf2 \cb3 These are the same (conditional) percentages that we found in C1! This will always be the case for a binary explanatory variable in simple logistic regression.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 D. Inference \'96 Simple Logistic Regression\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 \cb3 For significance tests, be sure to state the hypotheses, give the values of the test statistic and the p-value, and state your conclusion in context.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 1. Checking conditions
+\f1\b0 \cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 Are the conditions of linearity, randomness, and independence met in this situation? Make sure you discuss each condition.\cb1 \
+\cb3 Linearity is automatic\'a0
+\f4\i because the predictor is binary
+\f1\i0 , so there are only two points in the logit vs.\'a0X plot (since X can only take on 2 values). Since two points\'a0
+\f4\i always
+\f1\i0 \'a0make a line, linearity is a given.\cb1 \
+\cb3 We don\'92t know exactly how these students were selected; i.e., who took this placement test. Was it all freshman entering this college, or only the ones who were planning on taking a math course? Were there upperclassmen who took the test? Since we don\'92t have this information, we are going to have to assume that randomness is reasonable.\cb1 \
+\cb3 We can probably assume that each student\'92s scores\'a0
+\f4\i on the placement exam
+\f1\i0 \'a0are indepedent, but what really matters is independence of the\'a0
+\f4\i response
+\f1\i0 \'a0\'96 the course grades. The course grades are probably not independent, since presumably some of these students took the same course with the same professor (and maybe that professor is harder or easier than another professor). I think independence fails, yet we will continue for the sake of practice\'85\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 2.
+\f1\b0 \'a0Compute a 95% confidence interval for your slope and use it to find a confidence interval for the odds ratio. Does your interval include the value 1? Why does that matter?\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 confint(model1) 
+\f6\i \cf7 \strokec7 #CI for the slope
+\f3\i0 \cf2 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## Waiting for profiling to be done...\
+##                 2.5 %    97.5 %\
+## (Intercept) 0.3140056 0.6320011\
+## RecTaken    0.1962513 0.5843922\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb5 exp(confint(model1)) 
+\f6\i \cf7 \strokec7 #CI for the OR
+\f3\i0 \cf2 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## Waiting for profiling to be done...\
+##                2.5 %   97.5 %\
+## (Intercept) 1.368897 1.881372\
+## RecTaken    1.216833 1.793900\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 We are 95% confident that the odds of course success for a student who takes the recommended course is between 122% and 179% the odds of success for student who doesn\'92t. Since this interval doesn\'92t include 1, we know that students who take the recommendation are significantly more likely to succeed than those that don\'92t.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 3.
+\f1\b0 \'a0Test the claim that the slope is 0.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 As seen in the summary, the p-value for the Wald test that\'a0
+\fs33\fsmilli16800 \cb1 \up0 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i \cf2 \cb3 H
+\f1\i0 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i\fs23\fsmilli11878 \cf2 \cb3 a
+\f1\i0\fs33\fsmilli16800 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5 \cf2 \cb3 :
+\f1 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i \cf2 \cb3 \uc0\u946 
+\f1\i0 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs23\fsmilli11878 \cf2 \cb3 1
+\f1\fs33\fsmilli16800 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5 \cf2 \cb3 \uc0\u8800 0
+\f1 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs28 \cf2 \cb3 H\cb1 \up0 \
+\pard\pardeftab720\partightenfactor0
+
+\fs21 \cf2 \cb3 \up0 a\cb1 \up0 \
+\pard\pardeftab720\partightenfactor0
+
+\fs28 \cf2 \cb3 \up0 :\cb1 \up0 \
+\cb3 \up0 \uc0\u946 \cb1 \up0 \
+\pard\pardeftab720\partightenfactor0
+
+\fs21 \cf2 \cb3 \up0 1\cb1 \up0 \
+\pard\pardeftab720\partightenfactor0
+
+\fs28 \cf2 \cb3 \up0 \uc0\u8800 \cb1 \up0 \
+\cb3 \up0 0\cb1 \up0 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1 \cf2 \cb3 \'a0is 0.0000791, so there is very strong evidence that the slope of\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0is not 0.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 4.
+\f1\b0 \'a0Use the G-test to test the overall effectiveness of the model.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 anova(model1, test=\cf8 \strokec8 "Chisq"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## Analysis of Deviance Table\
+## \
+## Model: binomial, link: logit\
+## \
+## Response: CourseSuccess\
+## \
+## Terms added sequentially (first to last)\
+## \
+## \
+##          Df Deviance Resid. Df Resid. Dev  Pr(>Chi)    \
+## NULL                      2128     2679.2              \
+## RecTaken  1   15.419      2127     2663.8 8.613e-05 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 The p-value for the G-test for model utility is extremely small, so there is very strong evidence that the odds of success in a course depends on if that course was recommended for the student.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 E. Exploratory Data Analysis \'96 Other Potential Predictors\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 \cb3 Other variables that may be useful in predicting course success are gender, ACT math score, and GPA. (You may feel there are other possibilities, but let\'92s focus on these three.)\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 1.
+\f1\b0 \'a0Calculate summary statistics for the 3 potential predictor variables.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 summary(MathPlacement$Gender); summary(MathPlacement$ACTM); summary(MathPlacement$GPAadj)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's \
+##  0.0000  0.0000  0.0000  0.4586  1.0000  1.0000    2116\
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's \
+##   13.00   25.00   27.00   26.98   30.00   36.00     322\
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's \
+##    0.00   33.00   37.00   35.73   39.00   40.00      20\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 Notice that\'a0
+\f4\i most
+\f1\i0 \'a0of the students are missing Gender and quite a few are missing ACT score, as well.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 2.
+\f1\b0 \'a0Use\'a0
+\f4\i appropriate
+\f1\i0 \'a0graphs, tables, and summary statistics to investigate the relationship between each potential predictor and the response variable. Write a sentence for each predictor, summarizing what you see.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 par(mfrow=c(\cf6 \strokec6 1\cf2 \strokec2 ,\cf6 \strokec6 2\cf2 \strokec2 ))\
+boxplot(GPAadj~CourseSuccess,data=MathPlacement, ylab=\cf8 \strokec8 "adjusted GPA"\cf2 \strokec2 )\
+boxplot(ACTM~CourseSuccess,data=MathPlacement, ylab=\cf8 \strokec8 "ACT math"\cf2 \strokec2 )\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 \cb1 {{\NeXTGraphic unknown.png \width26880 \height19200 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 favstats(GPAadj~CourseSuccess,data=MathPlacement)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##   CourseSuccess min Q1 median Q3 max     mean       sd    n missing\
+## 1             0   0 31     34 37  40 33.54626 4.486383  681       7\
+## 2             1   0 35     38 40  40 36.73950 4.210067 1428      13\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb5 favstats(ACTM~CourseSuccess,data=MathPlacement)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##   CourseSuccess min Q1 median Q3 max     mean       sd    n missing\
+## 1             0  13 23     25 28  36 25.24132 3.586852  605      83\
+## 2             1  15 26     28 31  36 27.87480 3.611240 1270     171\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb5 tally(~CourseSuccess+Gender,data=MathPlacement)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##              Gender\
+## CourseSuccess    0    1 <NA>\
+##          0      81  106  501\
+##          1     233  159 1049\
+##          <NA>    0    1  566\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 First, notice that GPA has been multiplied by 10, so instead of being on a 0 to 4.0 scale, it\'92s on a 0 to 40 scale. Students who succeeded in the course have a higher average GPA than those who didn\'92t succeed by about 3 points (0.3 on a usual GPA scale).\cb1 \
+\cb3 Students who succeeded in the course have a higher average ACT math score by about 2.5 points.\cb1 \
+\cb3 Both of those varibles have quite a few low outliers.\cb1 \
+\cb3 Women were more likely to succeed in the course, with = 74.2% succeeding compared to 159/(159+106) = 60% for men. However, we should once again point out the large number of students whose gender is not recorded.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 3. Checking conditions - Linearity
+\f1\b0 \cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 We need to check that the relationship between the log odds (logits) and each predictor is approximately linear. (We\'92ve already discussed randomness and independence above.)\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 a. ACT math score
+\f1\b0 \cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 We could use the \'93grouping\'94 technique discussed in Chapter 9, and used in the \'93Logistic Regression Practice\'94 activity. Recall that in this technique, we create similarly-sized groups of ACT scores and plot the mean score of each group against the log odds of success in each group. A more \'93quick-and-dirty\'94 method is to use code similar to that used at the very end of the \'93Logistic Regression Practice\'94 activity to calculate log odds for each ACT score, and plot this against ACT. (Make sure you understand what\'a0
+\f4\i every line
+\f1\i0 \'a0of code below is doing!)\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 tab.ACT <- xtabs(~ACTM+CourseSuccess,data=MathPlacement)\
+prop.ACT <- tab.ACT[,\cf6 \strokec6 2\cf2 \strokec2 ]/(tab.ACT[,\cf6 \strokec6 2\cf2 \strokec2 ] + tab.ACT[,\cf6 \strokec6 1\cf2 \strokec2 ])\
+plot(log(prop.ACT/(\cf6 \strokec6 1\cf2 \strokec2 -prop.ACT))~sort(unique(MathPlacement$ACTM)),xlab=\cf8 \strokec8 "ACT math"\cf2 \strokec2 ,ylab=\cf8 \strokec8 "log(odds) of success"\cf2 \strokec2 )\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 \cb1 {{\NeXTGraphic 1__#$!@%!#__unknown.png \width15360 \height15360 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\
+\cb3 Based on the plot above, do you think that linearity of the logits is a reasonable assumption for this variable?\cb1 \
+\cb3 Yes, it looks like linearity is reasonable. There\'92s some more variability at the beginning of the plot but that\'92s understandable since there aren\'92t many data points there (this would look better if we grouped those students together).\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 b. adjusted GPA
+\f1\b0 \cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 Follow the method in part (a) to plot the logits against adjusted GPA. Based on that plot, do you think that linearity of the logits is a reasonable assumption for this variable?\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 tab.GPA <- xtabs(~GPAadj+CourseSuccess,data=MathPlacement); tab.GPA\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##       CourseSuccess\
+## GPAadj   0   1\
+##     0    1   7\
+##     20   3   2\
+##     21   1   0\
+##     22   2   0\
+##     23   6   1\
+##     24   6   3\
+##     25  13   2\
+##     26  14   5\
+##     27  25   9\
+##     28  22  13\
+##     29  29  22\
+##     30  38  25\
+##     31  51  35\
+##     32  47  49\
+##     33  49  61\
+##     34  49  64\
+##     35  60  88\
+##     36  60 117\
+##     37  63 128\
+##     38  54 174\
+##     39  54 248\
+##     40  34 375\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 Notice that there is one group of data points that needs to be deleted from the data set because they don\'92t make any sense.\'a0
+\f2\b Delete those points now.
+\f1\b0 \cb1 \
+\cb3 There are 8 students whose GPAs are listed as 0. This is not possible, or they wouldn\'92t still be in school. My guess is that this information was missing for these students, or maybe they were first-semester freshmen and didn\'92t have college GPAs. In any case, I believe they should be deleted.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 MathPlacement$GPA2 <- ifelse(MathPlacement$GPAadj==\cf6 \strokec6 0\cf2 \strokec2 , \cf9 \strokec9 NA\cf2 \strokec2 , MathPlacement$GPAadj) 
+\f6\i \cf7 \strokec7 #create a new variable where GPA=0 has been set to "NA"
+\f3\i0 \cf2 \strokec2 \
+tab.GPA <- xtabs(~GPA2+CourseSuccess,data=MathPlacement) 
+\f6\i \cf7 \strokec7 #re-tabulate using that new variable
+\f3\i0 \cf2 \strokec2 \
+prop.GPA <- tab.GPA[,\cf6 \strokec6 2\cf2 \strokec2 ]/(tab.GPA[,\cf6 \strokec6 2\cf2 \strokec2 ] + tab.GPA[,\cf6 \strokec6 1\cf2 \strokec2 ])\
+plot(log(prop.GPA/(\cf6 \strokec6 1\cf2 \strokec2 -prop.GPA))~sort(unique(MathPlacement$GPA2)),xlab=\cf8 \strokec8 "GPA"\cf2 \strokec2 ,ylab=\cf8 \strokec8 "log(odds) of success"\cf2 \strokec2 )\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 \cb1 {{\NeXTGraphic 2__#$!@%!#__unknown.png \width15360 \height15360 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\
+\cb3 It looks like linearity is possibly reasonable. There is some curvature for larger X, probably due to the fact that 40 (4.0) is the highest GPA one can have. We could try a power transformation, but for the sake of simplicity, let\'92s leave it as-is for now.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 c. Gender
+\f1\b0 \cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 Is linearity a reasonable assumption for the gender variable?\cb1 \
+\cb3 Yes! Linearity is automatic because gender is binary.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 F. Multiple Logistic Regression \'96 2 variables\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 \cb3 Model 2
+\f1\b0 : For the math professors, GPA is the easiest information to get, so let\'92s start with a model that adds GPA to the existing model with\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 .\cb1 \
+
+\f2\b \cb3 1.
+\f1\b0 \'a0Fit the logistic regression to predict course success from\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0and GPA and call this\'a0
+\f3\fs25\fsmilli12600 \cb4 model2
+\f1\fs28 \cb3 .\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 Remember we need to use the new variable,\'a0
+\f3\fs25\fsmilli12600 \cb4 GPA2
+\f1\fs28 \cb3 , that doesn\'92t have the 0s in it.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 model2 <- glm(CourseSuccess~RecTaken+GPA2,data=MathPlacement,family=binomial); summary(model2)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## \
+## Call:\
+## glm(formula = CourseSuccess ~ RecTaken + GPA2, family = binomial, \
+##     data = MathPlacement)\
+## \
+## Deviance Residuals: \
+##     Min       1Q   Median       3Q      Max  \
+## -1.9618  -1.0009   0.5734   0.7703   2.3226  \
+## \
+## Coefficients:\
+##             Estimate Std. Error z value Pr(>|z|)    \
+## (Intercept) -7.02145    0.47543  -14.77   <2e-16 ***\
+## RecTaken    -0.04418    0.11329   -0.39    0.697    \
+## GPA2         0.21970    0.01375   15.98   <2e-16 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+## \
+## (Dispersion parameter for binomial family taken to be 1)\
+## \
+##     Null deviance: 2645.6  on 2100  degrees of freedom\
+## Residual deviance: 2327.0  on 2098  degrees of freedom\
+##   (595 observations deleted due to missingness)\
+## AIC: 2333\
+## \
+## Number of Fisher Scoring iterations: 4\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 2.
+\f1\b0 \'a0Write out the fitted model.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i\fs33\fsmilli16800 \cf2 \cb3 \up0 ln
+\i0 (
+\i oddsofsuccess
+\i0 )=0.472\uc0\u8722 0.044\u8727 
+\i RecTaken
+\i0 +0.220\uc0\u8727 
+\i GPAadj
+\f1\i0 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs28 \cf2 \cb3 l\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 f\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 u\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 0.472\cb1 \up0 \
+\cb3 \up0 \uc0\u8722 \cb1 \up0 \
+\cb3 \up0 0.044\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 R\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 T\cb1 \up0 \
+\cb3 \up0 a\cb1 \up0 \
+\cb3 \up0 k\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 0.220\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 G\cb1 \up0 \
+\cb3 \up0 P\cb1 \up0 \
+\cb3 \up0 A\cb1 \up0 \
+\cb3 \up0 a\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 j\cb1 \up0 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 3.
+\f1\b0 \'a0Comment on the effectiveness of each predictor in the model as well as the overall fit. Be sure to indicate what value(s) from the output lead to your conclusions.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 anova(model2, test=\cf8 \strokec8 "Chisq"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## Analysis of Deviance Table\
+## \
+## Model: binomial, link: logit\
+## \
+## Response: CourseSuccess\
+## \
+## Terms added sequentially (first to last)\
+## \
+## \
+##          Df Deviance Resid. Df Resid. Dev  Pr(>Chi)    \
+## NULL                      2100     2645.6              \
+## RecTaken  1   15.312      2099     2630.2 9.114e-05 ***\
+## GPA2      1  303.218      2098     2327.0 < 2.2e-16 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 With adjusted GPA in the model,\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0is no longer significant (p-val = 0.697)! Adjusted GPA is highly significant (p-value approx 0), and the overall model is useful, according to the drop-in-deviance test (p-value approx 0).\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 4.
+\f1\b0 \'a0Find and interpret the slope coefficient (in terms of an odds ratio) of GPA, in the context of this situation.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 exp(\cf6 \strokec6 0.21970\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## [1] 1.245703\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 A student with a 0.1-point higher GPA (1-point increase in adjusted GPA) has 25% higher odds of success, assuming the same response to the course recommendation. (That is, if a student did take the recommendation, he/she has 25% higher odds of success compared to someone with 0.1-point lower GPA who also took the recommendation. If a student did not take the recommendation, he/she has 25% higher odds of success compared to someone with 0.1-point lower GPA who also didn\'92t take the recommendation.)\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 5.
+\f1\b0 \'a0Find the confidence interval for slope coefficient of\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 . Interpret this CI in terms of odds ratios, in the context of this situation.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 confint.default(model2) 
+\f6\i \cf7 \strokec7 #CI for the slope
+\f3\i0 \cf2 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##                  2.5 %     97.5 %\
+## (Intercept) -7.9532781 -6.0896119\
+## RecTaken    -0.2662210  0.1778539\
+## GPA2         0.1927552  0.2466383\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb5 exp(confint.default(model2)) 
+\f6\i \cf7 \strokec7 #CI for the OR
+\f3\i0 \cf2 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##                   2.5 %      97.5 %\
+## (Intercept) 0.000351508 0.002266288\
+## RecTaken    0.766269785 1.194650746\
+## GPA2        1.212585870 1.279716193\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 We are 95% confident that the odds of course success for a student who takes the recommended course is between 76% and 120% the odds of success for student who doesn\'92t, assuming the same GPA. This interval does include 1, which means that\'a0
+\f4\i with GPA in the model
+\f1\i0 , we don\'92t know that students who take the recommendation are significantly more likely to succeed than those that don\'92t.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 6.
+\f1\b0 \'a0Use the fitted logistic model to predict the\'a0
+\f4\i probability
+\f1\i0 \'a0of success for a student who took the recommended course and had a GPA of 3.0, and the\'a0
+\f4\i probability
+\f1\i0 \'a0of success for a student who didn\'92t take the recommended course and had a GPA of 3.0. Then use the model to predict the\'a0
+\f4\i probability
+\f1\i0 \'a0of success for a student who took the recommended course and had a GPA of 3.9, and the\'a0
+\f4\i probability
+\f1\i0 \'a0of success for a student who didn\'92t take the recommended course and had a GPA of 3.9. Comment on what you see.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 exp(-\cf6 \strokec6 7.02145\cf2 \strokec2 -\cf6 \strokec6 0.04418\cf2 \strokec2 *\cf6 \strokec6 1\cf2 \strokec2 +\cf6 \strokec6 0.21970\cf2 \strokec2 *\cf6 \strokec6 30\cf2 \strokec2 )/(\cf6 \strokec6 1\cf2 \strokec2 +exp(-\cf6 \strokec6 7.02145\cf2 \strokec2 -\cf6 \strokec6 0.04418\cf2 \strokec2 *\cf6 \strokec6 1\cf2 \strokec2 +\cf6 \strokec6 0.21970\cf2 \strokec2 *\cf6 \strokec6 30\cf2 \strokec2 )) 
+\f6\i \cf7 \strokec7 #prob of success if GPA=3.0 (GPAadj=30) and RecTaken=1
+\f3\i0 \cf2 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## [1] 0.383521\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb5 exp(-\cf6 \strokec6 7.02145\cf2 \strokec2 -\cf6 \strokec6 0.04418\cf2 \strokec2 *\cf6 \strokec6 0\cf2 \strokec2 +\cf6 \strokec6 0.21970\cf2 \strokec2 *\cf6 \strokec6 30\cf2 \strokec2 )/(\cf6 \strokec6 1\cf2 \strokec2 +exp(-\cf6 \strokec6 7.02145\cf2 \strokec2 -\cf6 \strokec6 0.04418\cf2 \strokec2 *\cf6 \strokec6 0\cf2 \strokec2 +\cf6 \strokec6 0.21970\cf2 \strokec2 *\cf6 \strokec6 30\cf2 \strokec2 )) 
+\f6\i \cf7 \strokec7 #prob of success if GPA=3.0 (GPAadj=30) and RecTaken=0
+\f3\i0 \cf2 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## [1] 0.3940189\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb5 exp(-\cf6 \strokec6 7.02145\cf2 \strokec2 -\cf6 \strokec6 0.04418\cf2 \strokec2 *\cf6 \strokec6 1\cf2 \strokec2 +\cf6 \strokec6 0.21970\cf2 \strokec2 *\cf6 \strokec6 39\cf2 \strokec2 )/(\cf6 \strokec6 1\cf2 \strokec2 +exp(-\cf6 \strokec6 7.02145\cf2 \strokec2 -\cf6 \strokec6 0.04418\cf2 \strokec2 *\cf6 \strokec6 1\cf2 \strokec2 +\cf6 \strokec6 0.21970\cf2 \strokec2 *\cf6 \strokec6 39\cf2 \strokec2 )) 
+\f6\i \cf7 \strokec7 #prob of success if GPA=3.9 (GPAadj=39) and RecTaken=1
+\f3\i0 \cf2 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## [1] 0.8179724\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb5 exp(-\cf6 \strokec6 7.02145\cf2 \strokec2 -\cf6 \strokec6 0.04418\cf2 \strokec2 *\cf6 \strokec6 0\cf2 \strokec2 +\cf6 \strokec6 0.21970\cf2 \strokec2 *\cf6 \strokec6 39\cf2 \strokec2 )/(\cf6 \strokec6 1\cf2 \strokec2 +exp(-\cf6 \strokec6 7.02145\cf2 \strokec2 -\cf6 \strokec6 0.04418\cf2 \strokec2 *\cf6 \strokec6 0\cf2 \strokec2 +\cf6 \strokec6 0.21970\cf2 \strokec2 *\cf6 \strokec6 39\cf2 \strokec2 )) 
+\f6\i \cf7 \strokec7 #prob of success if GPA=3.9 (GPAadj=39) and RecTaken=0
+\f3\i0 \cf2 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## [1] 0.8244583\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 What we\'92re seeing here is that if you have a (relatively) low GPA, you\'92re not likely to succeed in the course; if you have a high GPA, you are likely to succeed. Whether you take the recommendation doesn\'92t matter! (This matches up with our observation that\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0is not significant once GPA is added to the model.)\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 G. Multiple Logistic Regression \'96 3 variables\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 \cb3 Model 3
+\f1\b0 :\cb1 \
+
+\f2\b \cb3 1.
+\f1\b0 \'a0Fit the logistic regression to predict course success from\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 , GPA, and gender and call this\'a0
+\f3\fs25\fsmilli12600 \cb4 model3
+\f1\fs28 \cb3 .\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 model3 <- glm(CourseSuccess~RecTaken+GPA2+Gender,data=MathPlacement,family=binomial); summary(model3)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## \
+## Call:\
+## glm(formula = CourseSuccess ~ RecTaken + GPA2 + Gender, family = binomial, \
+##     data = MathPlacement)\
+## \
+## Deviance Residuals: \
+##     Min       1Q   Median       3Q      Max  \
+## -2.0602  -0.9914   0.5640   0.7431   2.4471  \
+## \
+## Coefficients:\
+##             Estimate Std. Error z value Pr(>|z|)    \
+## (Intercept) -7.54206    1.00073  -7.537 4.83e-14 ***\
+## RecTaken     0.06142    0.22344   0.275    0.783    \
+## GPA2         0.23688    0.02861   8.280  < 2e-16 ***\
+## Gender      -0.13828    0.20528  -0.674    0.501    \
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+## \
+## (Dispersion parameter for binomial family taken to be 1)\
+## \
+##     Null deviance: 714.03  on 569  degrees of freedom\
+## Residual deviance: 609.63  on 566  degrees of freedom\
+##   (2126 observations deleted due to missingness)\
+## AIC: 617.63\
+## \
+## Number of Fisher Scoring iterations: 3\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 2.
+\f1\b0 \'a0Write out the fitted model.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i\fs33\fsmilli16800 \cf2 \cb3 \up0 ln
+\i0 (
+\i oddsofsuccess
+\i0 )=\uc0\u8722 7.542+0.061\u8727 
+\i RecTaken
+\i0 +0.237\uc0\u8727 
+\i GPAadj
+\i0 \uc0\u8722 0.138\u8727 
+\i Gender
+\f1\i0 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs28 \cf2 \cb3 l\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 f\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 u\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 \uc0\u8722 \cb1 \up0 \
+\cb3 \up0 7.542\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 0.061\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 R\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 T\cb1 \up0 \
+\cb3 \up0 a\cb1 \up0 \
+\cb3 \up0 k\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 0.237\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 G\cb1 \up0 \
+\cb3 \up0 P\cb1 \up0 \
+\cb3 \up0 A\cb1 \up0 \
+\cb3 \up0 a\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 j\cb1 \up0 \
+\cb3 \up0 \uc0\u8722 \cb1 \up0 \
+\cb3 \up0 0.138\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 G\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 r\cb1 \up0 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 3.
+\f1\b0 \'a0Comment on the effectiveness of each predictor in the model as well as the overall fit. Be sure to indicate what value(s) from the output lead to your conclusions.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 anova(model3, test=\cf8 \strokec8 "Chisq"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## Analysis of Deviance Table\
+## \
+## Model: binomial, link: logit\
+## \
+## Response: CourseSuccess\
+## \
+## Terms added sequentially (first to last)\
+## \
+## \
+##          Df Deviance Resid. Df Resid. Dev  Pr(>Chi)    \
+## NULL                       569     714.03              \
+## RecTaken  1   12.278       568     701.75 0.0004584 ***\
+## GPA2      1   91.662       567     610.09 < 2.2e-16 ***\
+## Gender    1    0.452       566     609.63 0.5013967    \
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 With adjusted GPA and Gender in the model,\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0is not significant (p-val = 0.783). With adjusted GPA and\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0in the model, Gender is not significant (p-val = 0.501). Adjusted GPA is highly significant (p-value approx 0), and the overall model is useful, according to the drop-in-deviance test (p-value approx 0).\cb1 \
+\cb3 Notice how few cases are being used in our analysis now, since so many students are missing Gender!\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 H. Multiple Logistic Regression \'96 4 variables\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 \cb3 Model 4
+\f1\b0 :\cb1 \
+
+\f2\b \cb3 1.
+\f1\b0 \'a0Fit the logistic regression to predict course success from\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 , GPA, gender, and ACT math score and call this\'a0
+\f3\fs25\fsmilli12600 \cb4 model4
+\f1\fs28 \cb3 .\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 model4 <- glm(CourseSuccess~RecTaken+GPA2+Gender+ACTM,data=MathPlacement,family=binomial); summary(model4)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## \
+## Call:\
+## glm(formula = CourseSuccess ~ RecTaken + GPA2 + Gender + ACTM, \
+##     family = binomial, data = MathPlacement)\
+## \
+## Deviance Residuals: \
+##     Min       1Q   Median       3Q      Max  \
+## -2.2600  -0.8974   0.5354   0.7409   2.2327  \
+## \
+## Coefficients:\
+##             Estimate Std. Error z value Pr(>|z|)    \
+## (Intercept) -9.44573    1.22588  -7.705 1.31e-14 ***\
+## RecTaken     0.09007    0.24283   0.371    0.711    \
+## GPA2         0.19636    0.03228   6.083 1.18e-09 ***\
+## Gender      -0.36512    0.22852  -1.598    0.110    \
+## ACTM         0.12819    0.03189   4.020 5.83e-05 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+## \
+## (Dispersion parameter for binomial family taken to be 1)\
+## \
+##     Null deviance: 635.23  on 504  degrees of freedom\
+## Residual deviance: 525.06  on 500  degrees of freedom\
+##   (2191 observations deleted due to missingness)\
+## AIC: 535.06\
+## \
+## Number of Fisher Scoring iterations: 4\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 2.
+\f1\b0 \'a0Write out the fitted model.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\i\fs33\fsmilli16800 \cf2 \cb3 \up0 ln
+\i0 (
+\i oddsofsuccess
+\i0 )=\uc0\u8722 9.446+0.090\u8727 
+\i RecTaken
+\i0 +0.196\uc0\u8727 
+\i GPAadj
+\i0 \uc0\u8722 0.365\u8727 
+\i Gender
+\i0 +0.128\uc0\u8727 
+\i ACTM
+\f1\i0 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs28 \cf2 \cb3 l\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 (\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 o\cb1 \up0 \
+\cb3 \up0 f\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 u\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 s\cb1 \up0 \
+\cb3 \up0 )\cb1 \up0 \
+\cb3 \up0 =\cb1 \up0 \
+\cb3 \up0 \uc0\u8722 \cb1 \up0 \
+\cb3 \up0 9.446\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 0.090\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 R\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 c\cb1 \up0 \
+\cb3 \up0 T\cb1 \up0 \
+\cb3 \up0 a\cb1 \up0 \
+\cb3 \up0 k\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 0.196\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 G\cb1 \up0 \
+\cb3 \up0 P\cb1 \up0 \
+\cb3 \up0 A\cb1 \up0 \
+\cb3 \up0 a\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 j\cb1 \up0 \
+\cb3 \up0 \uc0\u8722 \cb1 \up0 \
+\cb3 \up0 0.365\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 G\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 n\cb1 \up0 \
+\cb3 \up0 d\cb1 \up0 \
+\cb3 \up0 e\cb1 \up0 \
+\cb3 \up0 r\cb1 \up0 \
+\cb3 \up0 +\cb1 \up0 \
+\cb3 \up0 0.128\cb1 \up0 \
+\cb3 \up0 \uc0\u8727 \cb1 \up0 \
+\cb3 \up0 A\cb1 \up0 \
+\cb3 \up0 C\cb1 \up0 \
+\cb3 \up0 T\cb1 \up0 \
+\cb3 \up0 M\cb1 \up0 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 3.
+\f1\b0 \'a0Comment on the effectiveness of each predictor in the model as well as the overall fit. Be sure to indicate what value(s) from the output lead to your conclusions.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 anova(model4, test=\cf8 \strokec8 "Chisq"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## Analysis of Deviance Table\
+## \
+## Model: binomial, link: logit\
+## \
+## Response: CourseSuccess\
+## \
+## Terms added sequentially (first to last)\
+## \
+## \
+##          Df Deviance Resid. Df Resid. Dev  Pr(>Chi)    \
+## NULL                       504     635.23              \
+## RecTaken  1   12.413       503     622.82 0.0004264 ***\
+## GPA2      1   80.312       502     542.51 < 2.2e-16 ***\
+## Gender    1    0.577       501     541.93 0.4473481    \
+## ACTM      1   16.868       500     525.06 4.008e-05 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 With adjusted GPA, Gender, and ACT in the model,\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0is not significant (p-val = 0.711). With adjusted GPA, ACT, and\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0in the model, Gender is not significant (p-val = 0.110). With the other variables in the model, Adjusted GPA is and ACT math score are both highly significant (p-value approx 0), and the overall model is useful, according to the drop-in-deviance test (p-value approx 0).\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 I. Multiple Logistic Regression \'96 with Interaction\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 \cb3 Model 5
+\f1\b0 :\cb1 \
+
+\f2\b \cb3 1.
+\f1\b0 \'a0Add the following interactions to\'a0
+\f3\fs25\fsmilli12600 \cb4 model4
+\f1\fs28 \cb3 : ACTxGender and GPAxGender. Call this\'a0
+\f3\fs25\fsmilli12600 \cb4 model5
+\f1\fs28 \cb3 .\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 model5 <- glm(CourseSuccess~RecTaken+GPA2+Gender+ACTM+ACTM*Gender+GPA2*Gender,data=MathPlacement,family=binomial); summary(model5)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## \
+## Call:\
+## glm(formula = CourseSuccess ~ RecTaken + GPA2 + Gender + ACTM + \
+##     ACTM * Gender + GPA2 * Gender, family = binomial, data = MathPlacement)\
+## \
+## Deviance Residuals: \
+##     Min       1Q   Median       3Q      Max  \
+## -2.2549  -0.9031   0.5390   0.7312   2.3118  \
+## \
+## Coefficients:\
+##             Estimate Std. Error z value Pr(>|z|)    \
+## (Intercept) -8.52458    1.74904  -4.874 1.09e-06 ***\
+## RecTaken     0.07120    0.24594   0.289   0.7722    \
+## GPA2         0.20789    0.04808   4.324 1.53e-05 ***\
+## Gender      -2.38350    2.43426  -0.979   0.3275    \
+## ACTM         0.07647    0.04505   1.697   0.0896 .  \
+## Gender:ACTM  0.10361    0.06470   1.601   0.1093    \
+## GPA2:Gender -0.01932    0.06430  -0.300   0.7638    \
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+## \
+## (Dispersion parameter for binomial family taken to be 1)\
+## \
+##     Null deviance: 635.23  on 504  degrees of freedom\
+## Residual deviance: 522.43  on 498  degrees of freedom\
+##   (2191 observations deleted due to missingness)\
+## AIC: 536.43\
+## \
+## Number of Fisher Scoring iterations: 4\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 2.
+\f1\b0 \'a0Comment on the effectiveness of the interaction terms based on their Wald test results.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 Their p-values (0.109 and 0.764) would indicate that neither interaction term is useful.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 3.
+\f1\b0 \'a0Conduct a nested drop-in-deviance test (LRT) to make a conclusion about whether the interaction terms are useful.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 Here, we want to compare the residual deviance for the full model (model5) to the residual deviance for the reduced model (model4). The full model has 2 more predictors than the reduced model, so we have 2 degrees of freedom.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 anova(model4, model5, test=\cf8 \strokec8 "Chisq"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## Analysis of Deviance Table\
+## \
+## Model 1: CourseSuccess ~ RecTaken + GPA2 + Gender + ACTM\
+## Model 2: CourseSuccess ~ RecTaken + GPA2 + Gender + ACTM + ACTM * Gender + \
+##     GPA2 * Gender\
+##   Resid. Df Resid. Dev Df Deviance Pr(>Chi)\
+## 1       500     525.06                     \
+## 2       498     522.43  2   2.6276   0.2688\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 The large p-value (0.268) indicates that the full model is not more useful than the reduced model; the interaction terms are unnecessary.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 J. Comparison of models\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 \cb3 1.
+\f1\b0 \'a0Compare and contrast models 1 - 5.\cb1 \
+
+\f2\b \cb3 2.
+\f1\b0 \'a0Are there any additional changes or different models you\'92d like to investigate? For example: deleting an existing term, trying a different interaction, or a squared term? If so, fit that model below.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 The obvious thing to do would be to delete\'a0
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0from Model 4, since it\'92s the least significant.\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 model6 <- glm(CourseSuccess~GPA2+Gender+ACTM,data=MathPlacement,family=binomial); summary(model6)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## \
+## Call:\
+## glm(formula = CourseSuccess ~ GPA2 + Gender + ACTM, family = binomial, \
+##     data = MathPlacement)\
+## \
+## Deviance Residuals: \
+##     Min       1Q   Median       3Q      Max  \
+## -2.2570  -0.9107   0.5335   0.7339   2.2204  \
+## \
+## Coefficients:\
+##             Estimate Std. Error z value Pr(>|z|)    \
+## (Intercept) -9.49927    1.21789  -7.800 6.20e-15 ***\
+## GPA2         0.19867    0.03169   6.269 3.62e-10 ***\
+## Gender      -0.36681    0.22836  -1.606    0.108    \
+## ACTM         0.12961    0.03168   4.091 4.29e-05 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+## \
+## (Dispersion parameter for binomial family taken to be 1)\
+## \
+##     Null deviance: 635.23  on 504  degrees of freedom\
+## Residual deviance: 525.20  on 501  degrees of freedom\
+##   (2191 observations deleted due to missingness)\
+## AIC: 533.2\
+## \
+## Number of Fisher Scoring iterations: 4\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 With adjusted GPA and ACT score in the model, Gender is still insignificant, so delete it as well:\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 model7 <- glm(CourseSuccess~GPA2+ACTM,data=MathPlacement,family=binomial); summary(model7)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## \
+## Call:\
+## glm(formula = CourseSuccess ~ GPA2 + ACTM, family = binomial, \
+##     data = MathPlacement)\
+## \
+## Deviance Residuals: \
+##     Min       1Q   Median       3Q      Max  \
+## -2.2075  -0.9710   0.5372   0.7756   2.6336  \
+## \
+## Coefficients:\
+##             Estimate Std. Error z value Pr(>|z|)    \
+## (Intercept) -9.81154    0.62326  -15.74   <2e-16 ***\
+## GPA2         0.18511    0.01526   12.13   <2e-16 ***\
+## ACTM         0.14851    0.01595    9.31   <2e-16 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+## \
+## (Dispersion parameter for binomial family taken to be 1)\
+## \
+##     Null deviance: 2346.0  on 1864  degrees of freedom\
+## Residual deviance: 1978.6  on 1862  degrees of freedom\
+##   (831 observations deleted due to missingness)\
+## AIC: 1984.6\
+## \
+## Number of Fisher Scoring iterations: 4\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 Note that we can\'92t do a nested drop-in-deviance test to compare model7 to model4 because so many observations were deleted in model4 (because of Gender) that aren\'92t deleted in model7.\cb1 \
+\cb3 Based on the plot in E3b, let\'92s try GPA squared:\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 model8 <- glm(CourseSuccess~GPA2+I(GPA2^\cf6 \strokec6 2\cf2 \strokec2 )+ACTM,data=MathPlacement,family=binomial); summary(model8)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## \
+## Call:\
+## glm(formula = CourseSuccess ~ GPA2 + I(GPA2^2) + ACTM, family = binomial, \
+##     data = MathPlacement)\
+## \
+## Deviance Residuals: \
+##     Min       1Q   Median       3Q      Max  \
+## -2.2911  -0.9939   0.5142   0.7987   1.9758  \
+## \
+## Coefficients:\
+##              Estimate Std. Error z value Pr(>|z|)    \
+## (Intercept)  2.385500   3.537716   0.674 0.500117    \
+## GPA2        -0.537783   0.208750  -2.576 0.009989 ** \
+## I(GPA2^2)    0.010688   0.003095   3.453 0.000554 ***\
+## ACTM         0.142938   0.015985   8.942  < 2e-16 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+## \
+## (Dispersion parameter for binomial family taken to be 1)\
+## \
+##     Null deviance: 2346.0  on 1864  degrees of freedom\
+## Residual deviance: 1967.4  on 1861  degrees of freedom\
+##   (831 observations deleted due to missingness)\
+## AIC: 1975.4\
+## \
+## Number of Fisher Scoring iterations: 4\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 The squared term is significant. Let\'92s do a nested drop-in-deviance test to compare model8 to model7:\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 anova(model7, model8, test=\cf8 \strokec8 "Chisq"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## Analysis of Deviance Table\
+## \
+## Model 1: CourseSuccess ~ GPA2 + ACTM\
+## Model 2: CourseSuccess ~ GPA2 + I(GPA2^2) + ACTM\
+##   Resid. Df Resid. Dev Df Deviance  Pr(>Chi)    \
+## 1      1862     1978.6                          \
+## 2      1861     1967.4  1   11.199 0.0008184 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 The small p-value indicates that this term is useful.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f4\i \cf2 \cb3 There are many other models you could try here: adding interaction, getting rid of ACTM, etc.
+\f1\i0 \cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 3.
+\f1\b0 \'a0Which model (of all the ones you\'92ve fit) do you prefer? Explain why.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 I prefer model7 or model8. A plot of log(odds) against GPA squared shows that squaring GPA does not improve the curvature (for large X) very much. Thus, despite the fact that GPA^2 is a significant predictor, I would use model7 due to its simplicity.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f0\fs60 \cf2 \cb3 K. Prediction/Misclassification Table\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 \cb3 Using\'a0
+\f4\i your
+\f1\i0 \'a0preferred model from J3\'85\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 1.
+\f1\b0 \'a0The predicted probabilities for all of the data cases can be accessed through\'a0
+\f3\fs25\fsmilli12600 \cb4 fitted(model)
+\f1\fs28 \cb3 . Classify each data point as being a predicted \'93success\'94 (1) if the predicted probability is greater than 0.5, and a predicted \'93failure\'94 (0) if the predicted probability is less than 0.5. (Hint: You can do this fairly easily in R. Think about how we created the indicator variables.)\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 pred.success.7 <- ifelse(fitted(model7)>\cf6 \strokec6 0.5\cf2 \strokec2 ,\cf6 \strokec6 1\cf2 \strokec2 ,\cf6 \strokec6 0\cf2 \strokec2 )\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 \cb3 2.
+\f1\b0 \'a0Look at the classifications for each of the data points and create a 2 x 2 table showing counts of how the data are classified (predicted success or predicted failure) versus their\'a0
+\f4\i actual
+\f1\i0 \'a0response values. To deal with missing data cases for your model, pull the actual response values from\'a0
+\f3\fs25\fsmilli12600 \cb4 model$y
+\f1\fs28 \cb3 , rather than\'a0
+\f3\fs25\fsmilli12600 \cb4 CourseSuccess
+\f1\fs28 \cb3 . (Hint: Using\'a0
+\f3\fs25\fsmilli12600 \cb4 tally(, format="proportion")
+\f1\fs28 \cb3 \'a0will be useful here.)\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 tally(~pred.success.7+model7$y,data=MathPlacement, format=\cf8 \strokec8 "proportion"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##               model7$y\
+## pred.success.7          0          1\
+##              0 0.12439678 0.07560322\
+##              1 0.19839142 0.60160858\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b\fs28 \cf2 3.
+\f1\b0 \'a0Comment on the accuracy of the classifications for your model. What percentage of cases were \'93misclassified\'94 (i.e., predicted to be success when actually a failure or vice versa)?\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+\cf2 \cb3 For model7 (ACT math and adjusted GPA), 7.6% were predicted failures that actually succeeded and 19.8% were predicted successes that actually failed, leading to a total misclassification rate of 27.4%.\cb1 \
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f2\b \cf2 \cb3 Compare to other models:
+\f1\b0 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f6\i\fs26 \cf7 \cb5 \strokec7 #Misclassification rate for model1:
+\f3\i0 \cf2 \strokec2 \
+pred.success.1 <- ifelse(fitted(model1)>\cf6 \strokec6 0.5\cf2 \strokec2 ,\cf6 \strokec6 1\cf2 \strokec2 ,\cf6 \strokec6 0\cf2 \strokec2 )\
+tally(~pred.success.1+model1$y,data=MathPlacement, format=\cf8 \strokec8 "proportion"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##               model1$y\
+## pred.success.1         0         1\
+##              1 0.3231564 0.6768436\
+\pard\pardeftab720\partightenfactor0
+
+\f6\i \cf7 \cb5 \strokec7 #Misclassification rate for model4:
+\f3\i0 \cf2 \strokec2 \
+pred.success.4 <- ifelse(fitted(model4)>\cf6 \strokec6 0.5\cf2 \strokec2 ,\cf6 \strokec6 1\cf2 \strokec2 ,\cf6 \strokec6 0\cf2 \strokec2 )\
+tally(~pred.success.4+model4$y,data=MathPlacement, format=\cf8 \strokec8 "proportion"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##               model4$y\
+## pred.success.4          0          1\
+##              0 0.12871287 0.07128713\
+##              1 0.19405941 0.60594059\
+\pard\pardeftab720\partightenfactor0
+
+\f6\i \cf7 \cb5 \strokec7 #Misclassification rate for model8:
+\f3\i0 \cf2 \strokec2 \
+pred.success.8 <- ifelse(fitted(model8)>\cf6 \strokec6 0.5\cf2 \strokec2 ,\cf6 \strokec6 1\cf2 \strokec2 ,\cf6 \strokec6 0\cf2 \strokec2 )\
+tally(~pred.success.8+model8$y,data=MathPlacement, format=\cf8 \strokec8 "proportion"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##               model8$y\
+## pred.success.8         0         1\
+##              0 0.1367292 0.0922252\
+##              1 0.1860590 0.5849866\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 Model1 (
+\f3\fs25\fsmilli12600 \cb4 RecTaken
+\f1\fs28 \cb3 \'a0only) has a missclassification rate of 32.3% (it predicts\'a0
+\f4\i everyone
+\f1\i0 \'a0will succeed!). Model4 (all 4 variables) has a missclassification rate of 7.1%+19.4% = 26.5%. Model8 (GPA, GPA sqaured, ACT math) has a missclassification rate of 9.2%+18.6% = 27.8%.\cb1 \
+\cb3 Based on this information, I feel confident in my selection of model7. The very simple model (model1) has a much worse misclassification rate, but the more complicated models (model4 and model8) have essentially the same misclassification rate as model7, thus indicating they don\'92t do any better than my (simple) model.\cb1 \
+\cb3 On the other hand\'85\cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf2 \cb5 model9 <- glm(CourseSuccess~GPA2,data=MathPlacement,family=binomial); summary(model9) 
+\f6\i \cf7 \strokec7 #GPA only
+\f3\i0 \cf2 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ## \
+## Call:\
+## glm(formula = CourseSuccess ~ GPA2, family = binomial, data = MathPlacement)\
+## \
+## Deviance Residuals: \
+##     Min       1Q   Median       3Q      Max  \
+## -1.9458  -0.9913   0.5714   0.7665   2.3275  \
+## \
+## Coefficients:\
+##             Estimate Std. Error z value Pr(>|z|)    \
+## (Intercept) -7.00906    0.47441  -14.77   <2e-16 ***\
+## GPA2         0.21847    0.01338   16.33   <2e-16 ***\
+## ---\
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\
+## \
+## (Dispersion parameter for binomial family taken to be 1)\
+## \
+##     Null deviance: 2645.6  on 2100  degrees of freedom\
+## Residual deviance: 2327.2  on 2099  degrees of freedom\
+##   (595 observations deleted due to missingness)\
+## AIC: 2331.2\
+## \
+## Number of Fisher Scoring iterations: 4\
+\pard\pardeftab720\partightenfactor0
+
+\f6\i \cf7 \cb5 \strokec7 #Misclassification rate for model9:
+\f3\i0 \cf2 \strokec2 \
+pred.success.9 <- ifelse(fitted(model9)>\cf6 \strokec6 0.5\cf2 \strokec2 ,\cf6 \strokec6 1\cf2 \strokec2 ,\cf6 \strokec6 0\cf2 \strokec2 )\
+tally(~pred.success.9+model9$y,data=MathPlacement, format=\cf8 \strokec8 "proportion"\cf2 \strokec2 )\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 ##               model9$y\
+## pred.success.9         0         1\
+##              0 0.1223227 0.0790100\
+##              1 0.2013327 0.5973346\
+\pard\pardeftab720\sa200\partightenfactor0
+
+\f1\fs28 \cf2 This very simple model containing just adjusted GPA has a misclassfication rate of 7.9%+20.1% = 28%, which is only slightly worse than the model containing both GPA and ACT score (model7).\cb1 \
+}
