@@ -1,0 +1,100 @@
+---
+title: "Applied Stats: Homework Assignment 1"
+author: "Your Name Here"
+output: word_document
+---
+
+```{r, include = F}
+
+# Load Packages 
+library(mosaic)
+library(ggformula)
+library(tidyverse)
+
+#Load US_States data here:
+
+```
+
+## Instructions
+
+This assignment asks you to present your work with the US state data we used extensively during the first week.  You will be asked to phrase research questions and answer them for single variables and relationships between two variables.  Although not required, **you may re-use your work from Stations 2 & 3.**  Please read through the example write-up linked in the assignment description on Moodle.  It should give you an idea of the level of work expected.
+
+The goal of this assignment is for you to use your knowledge of introductory statistics tools to pose and answer three research questions.  Your work should include complete sentences, presentation of statistical figures and summaries, and in-context discussions.
+
+Each Part (1 - 3) below should include three sections:  
+
+  1. **Introduction of the variable(s)**: Introduce your variable(s), and pose of a research question both in context and in terms of the relevant population parameter.  Include discussion of what type of statistical test you plan to perform to answer the question.
+  2. **Exploratory data analysis.** Present a visual summary and a numerical summary, and discuss what you learned from them.  Discuss what you think the results of your hypothesis test will be based on your EDA.  Futher, include comments about whether the conditions are met for performing the hypothesis test.
+  3. **Inference and Conclusions.**  Perform the hypothesis test you posed in the introduction, interpreting the strength of the evidence and making a formal conclusion.  Also build and interpret a 95% confidence interval for your parameter of interest.
+
+
+
+# Part 1: One quantitative variable
+
+Choose one quantitative variable from the merged states data.  
+
+**TASK 1.1--Introduction of the variable:**
+
+
+
+
+**TASK 1.2--Exploratory Data Analysis**
+
+
+
+
+
+
+**TASK 1.3--Inference and Conclusions**
+
+
+
+
+
+
+# Part 2: Two binary variables
+
+Choose two binary variables from the merged states data.  
+
+**TASK 2.1--Introduction of the variables:**
+
+
+
+
+**TASK 2.2--Exploratory Data Analysis**
+
+
+
+
+
+
+**TASK 2.3--Inference and Conclusions**
+
+
+
+
+# Part 3: One binary and one quantitative variable
+
+Choose one binary variable and one quantitative variable from the merged states data.  
+
+**TASK 3.1--Introduction of the variables:**
+
+
+
+
+**TASK 3.2--Exploratory Data Analysis**
+
+
+
+
+
+
+**TASK 3.3--Inference and Conclusions**
+
+
+
+
+
+
+
+

@@ -1,0 +1,89 @@
+---
+title: "Homework 2"
+author: "[Your Name Here]"
+date: "[Due Date Here]"
+output: word_document
+---
+```{r include=FALSE}
+library(mosaic); library(ggformula); library(Stat2Data); library(tidyverse); library(gridExtra)
+
+#load US States data set:
+
+```
+
+## Part A
+
+### 1. 
+```{r}
+#Here you should have the code to fit the model 
+```
+
+### 2. 
+Your answer to the question should be here.
+
+### 3.
+Your answer to the question should be here.
+```{r, fig.height=4, fig.width=4}
+#Here you should have the code to make the scatterplot with line
+```
+
+### 4. 
+Your answer to the question should be here.
+
+### 5.
+Your answer to the question should be here.
+```{r, fig.height=8, fig.width=8}
+par(mfrow=c(2,2)) #This will put the plots on a 2x2 grid, so they take up less space
+#Here you should have the code to make the residual plots
+```
+
+## Part B
+
+### 1. 
+```{r}
+#Here you should have the code 
+```
+
+### 2. 
+Your answer to the question should be here.
+```{r, fig.height=8, fig.width=8}
+par(mfrow=c(2,2)) #This will put the plots on a 2x2 grid, so they take up less space
+#Here you should have the code to make the residual plots
+```
+
+### 3. 
+Your answer to the question should be here.
+```{r}
+#Here you should have the code 
+```
+
+### 4.
+Your answer to the question should be here.
+```{r}
+#Here you should have the code 
+```
+
+
+### 5.
+Your answer to the question should be here.
+```{r}
+#Here you should have the code 
+```
+
+
+## Part  C
+
+### 1.
+
+
+### 2.
+Your answer to the question should be here.
+```{r}
+#Here you should have the code 
+```
+
+### 3.
+Your answer to the question should be here.
+```{r}
+#Here you should have the code 
+```
